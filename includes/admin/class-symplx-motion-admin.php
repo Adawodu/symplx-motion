@@ -406,8 +406,8 @@ class Symplx_Motion_Admin {
 
         $provider = get_option( 'symplx_motion_provider', 'mock' );
         if ( 'replicate' === $provider ) {
-            $token = get_option( 'symplx_replicate_api_token', '' );
-            $version = get_option( 'symplx_replicate_model_version', '' );
+            $token = get_option( 'symplx_motion_replicate_api_token', '' );
+            $version = get_option( 'symplx_motion_replicate_model_version', '' );
             if ( ! $token ) {
                 $messages[] = __( 'Replicate token is missing.', 'symplx-motion' );
                 $type = 'error';

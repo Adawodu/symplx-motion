@@ -46,7 +46,7 @@ class Symplx_Starter {
     }
 
     public function load_textdomain() {
-        load_plugin_textdomain( 'symplx-starter', false, dirname( plugin_basename( SYMPLX_STARTER_PLUGIN_FILE ) ) . '/languages' );
+        load_plugin_textdomain( 'symplx-motion', false, dirname( plugin_basename( SYMPLX_STARTER_PLUGIN_FILE ) ) . '/languages' );
     }
 
     public function enqueue_admin( $hook ) {

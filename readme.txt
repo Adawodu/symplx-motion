@@ -26,7 +26,7 @@ Features:
 
 == Installation ==
 
-1. Download or clone the folder `symplx-starter`.
+1. Download or clone the folder `symplx-motion`.
 2. Zip the folder and upload via Plugins → Add New → Upload Plugin, or place the folder into `wp-content/plugins/`.
 3. Activate the plugin via the Plugins screen in WordPress.
 4. Go to Settings → Symplx Motion to set defaults and provider keys.

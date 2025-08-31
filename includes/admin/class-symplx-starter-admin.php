@@ -19,10 +19,10 @@ class Symplx_Starter_Admin {
 
     public function add_menu() {
         add_options_page(
-            __( 'Symplx Starter', 'symplx-starter' ),
-            __( 'Symplx Starter', 'symplx-starter' ),
+            __( 'Symplx Motion', 'symplx-motion' ),
+            __( 'Symplx Motion', 'symplx-motion' ),
             'manage_options',
-            'symplx-starter',
+            'symplx-motion',
             [ $this, 'render_settings' ]
         );
     }

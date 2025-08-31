@@ -68,7 +68,7 @@ class Symplx_Motion_Media_UI {
         }
 
         require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
 
         $provider = Symplx_Motion_Providers_Registry::get();
         if ( ! $provider ) {

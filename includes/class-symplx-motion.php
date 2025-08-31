@@ -12,13 +12,13 @@ class Symplx_Motion {
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_public' ] );
 
         // Load components.
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/admin/class-symplx-starter-admin.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/public/class-symplx-starter-public.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/rest/class-symplx-starter-rest.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/admin/class-symplx-motion-admin.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/public/class-symplx-motion-public.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/rest/class-symplx-motion-rest.php';
         require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/admin/class-symplx-starter-media.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/admin/class-symplx-starter-jobs-page.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/admin/class-symplx-motion-media.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/admin/class-symplx-motion-jobs-page.php';
 
         // Instantiate components.
         new Symplx_Motion_Admin();

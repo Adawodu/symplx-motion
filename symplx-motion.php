@@ -17,7 +17,7 @@ define( 'SYMPLX_MOTION_PLUGIN_FILE', __FILE__ );
 define( 'SYMPLX_MOTION_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SYMPLX_MOTION_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/class-symplx-starter.php';
+require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/class-symplx-motion.php';
 
 function symplx_motion() {
     static $instance = null;

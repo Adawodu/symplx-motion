@@ -96,7 +96,7 @@ class Symplx_Motion_Jobs_Table extends WP_List_Table {
             $ids = isset( $_REQUEST['attachment'] ) ? (array) $_REQUEST['attachment'] : [];
             $ids = array_map( 'absint', $ids );
             check_admin_referer( 'bulk-' . $this->_args['plural'] );
-            require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+            require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
             $jobs = new Symplx_Motion_Jobs();
             foreach ( $ids as $id ) {
                 if ( $id ) {
@@ -194,7 +194,7 @@ class Symplx_Motion_Jobs_Page {
         if ( isset( $_GET['symplx_action'] ) && $_GET['symplx_action'] === 'refresh' ) {
             $att_id = isset( $_GET['attachment_id'] ) ? absint( $_GET['attachment_id'] ) : 0;
             if ( $att_id && wp_verify_nonce( (string) $_GET['_wpnonce'], 'symplx_refresh_' . $att_id ) ) {
-                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
                 // Immediate check, then reschedule.
                 $jobs = new Symplx_Motion_Jobs();
                 $jobs->check_job( $att_id );
@@ -214,7 +214,7 @@ class Symplx_Motion_Jobs_Page {
             }
             if ( $ok ) {
                 require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
                 $provider = Symplx_Motion_Providers_Registry::get();
                 if ( $provider ) {
                     $res = $provider->create_job( $att_id, [] );

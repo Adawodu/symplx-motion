@@ -93,7 +93,7 @@ class Symplx_Motion_REST {
         }
 
         // Schedule background polling.
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
         Symplx_Motion_Jobs::schedule_check( $attachment_id, 30 );
 
         return rest_ensure_response( [ 'attachment_id' => $attachment_id, 'status' => $status, 'job_id' => $job_id ] );

@@ -329,7 +329,7 @@ class Symplx_Motion_Admin {
         }
 
         require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-motion-jobs.php';
         $provider = Symplx_Motion_Providers_Registry::get();
         if ( ! $provider ) {
             wp_safe_redirect( add_query_arg( [ 'post' => $post_id, 'action' => 'edit', 'symplx_bulk' => 1, 'ok' => 0, 'fail' => 0, 'reason' => 'noprovider' ], admin_url( 'post.php' ) ) );

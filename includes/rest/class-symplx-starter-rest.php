@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Symplx_Starter_REST {
+class Symplx_Motion_REST {
 
     public function __construct() {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
@@ -40,10 +40,10 @@ class Symplx_Starter_REST {
     }
 
     public function generate_motion( $request ) {
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/providers/interface-provider.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
         $attachment_id = absint( $request->get_param( 'attachment_id' ) );
         $prompt        = sanitize_text_field( (string) $request->get_param( 'prompt' ) );
-        $effect        = $request->get_param( 'effect' ) ?: get_option( 'symplx_starter_default_effect', 'kenburns' );
+        $effect        = $request->get_param( 'effect' ) ?: get_option( 'symplx_motion_default_effect', 'kenburns' );
         $duration      = absint( $request->get_param( 'duration' ) );
         $fps           = absint( $request->get_param( 'fps' ) );
         if ( ! get_post( $attachment_id ) ) {
@@ -82,7 +82,7 @@ class Symplx_Starter_REST {
             $resolved_preset = get_post_meta( $parent, 'symplx_motion_mapping_preset', true );
         }
         if ( ! $resolved_model ) {
-            $resolved_model = get_option( 'symplx_replicate_model_version', '' );
+            $resolved_model = get_option( 'symplx_motion_replicate_model_version', '' );
         }
         update_post_meta( $attachment_id, '_symplx_motion_model_version_resolved', $resolved_model );
         if ( $resolved_preset ) {
@@ -93,15 +93,15 @@ class Symplx_Starter_REST {
         }
 
         // Schedule background polling.
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
-        Symplx_Starter_Jobs::schedule_check( $attachment_id, 30 );
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+        Symplx_Motion_Jobs::schedule_check( $attachment_id, 30 );
 
         return rest_ensure_response( [ 'attachment_id' => $attachment_id, 'status' => $status, 'job_id' => $job_id ] );
     }
 
     public function status_motion( $request ) {
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/helpers/media.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/helpers/media.php';
         $attachment_id = absint( $request->get_param( 'attachment_id' ) );
         if ( ! get_post( $attachment_id ) ) {
             return new WP_Error( 'not_found', 'Attachment not found', [ 'status' => 404 ] );
@@ -109,7 +109,7 @@ class Symplx_Starter_REST {
         $provider_slug = get_post_meta( $attachment_id, '_symplx_motion_provider', true ) ?: Symplx_Motion_Providers_Registry::get_active_slug();
         $job_id        = get_post_meta( $attachment_id, '_symplx_motion_job_id', true );
         $status        = get_post_meta( $attachment_id, '_symplx_motion_status', true ) ?: 'none';
-        $effect        = get_post_meta( $attachment_id, '_symplx_motion_effect', true ) ?: get_option( 'symplx_starter_default_effect', 'kenburns' );
+        $effect        = get_post_meta( $attachment_id, '_symplx_motion_effect', true ) ?: get_option( 'symplx_motion_default_effect', 'kenburns' );
         $video_meta    = get_post_meta( $attachment_id, '_symplx_motion_video_url', true );
 
         // If already have video URL, just return ready.

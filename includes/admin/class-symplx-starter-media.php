@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-class Symplx_Starter_Media_UI {
+class Symplx_Motion_Media_UI {
 
     public function __construct() {
         add_filter( 'media_row_actions', [ $this, 'row_actions' ], 10, 2 );
@@ -18,13 +18,13 @@ class Symplx_Starter_Media_UI {
                 'action'        => 'symplx_generate_motion',
                 'attachment_id' => $post->ID,
             ], admin_url( 'admin.php' ) ), 'symplx_generate_motion_' . $post->ID );
-            $actions['symplx_generate_motion'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Generate Motion', 'symplx-starter' ) . '</a>';
+            $actions['symplx_generate_motion'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Generate Motion', 'symplx-motion' ) . '</a>';
         }
         return $actions;
     }
 
     public function add_column( $cols ) {
-        $cols['symplx_motion'] = __( 'Motion', 'symplx-starter' );
+        $cols['symplx_motion'] = __( 'Motion', 'symplx-motion' );
         return $cols;
     }
 
@@ -50,25 +50,25 @@ class Symplx_Starter_Media_UI {
         }
         $title = $model ? ' title="' . esc_attr( $model ) . '"' : '';
         if ( $video ) {
-            echo '<span class="dashicons dashicons-yes" style="color:#46b450"' . $title . '></span> ' . esc_html__( 'Ready', 'symplx-starter' ) . esc_html( $suffix );
+            echo '<span class="dashicons dashicons-yes" style="color:#46b450"' . $title . '></span> ' . esc_html__( 'Ready', 'symplx-motion' ) . esc_html( $suffix );
         } else {
             echo '<span' . $title . '>' . esc_html( ucfirst( $status ) . $suffix ) . '</span>';
         }
     }
 
     public function action_generate_motion() {
-        if ( ! current_user_can( 'upload_files' ) ) wp_die( __( 'Permission denied', 'symplx-starter' ) );
+        if ( ! current_user_can( 'upload_files' ) ) wp_die( __( 'Permission denied', 'symplx-motion' ) );
         $attachment_id = isset( $_GET['attachment_id'] ) ? absint( $_GET['attachment_id'] ) : 0;
         if ( ! $attachment_id || ! wp_verify_nonce( (string) $_GET['_wpnonce'], 'symplx_generate_motion_' . $attachment_id ) ) {
-            wp_die( __( 'Invalid request', 'symplx-starter' ) );
+            wp_die( __( 'Invalid request', 'symplx-motion' ) );
         }
         if ( ! wp_attachment_is_image( $attachment_id ) ) {
             wp_redirect( add_query_arg( 'symplx_motion_notice', 'notimage', admin_url( 'upload.php' ) ) );
             exit;
         }
 
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
 
         $provider = Symplx_Motion_Providers_Registry::get();
         if ( ! $provider ) {
@@ -103,14 +103,14 @@ class Symplx_Starter_Media_UI {
             $resolved_preset = get_post_meta( $parent, 'symplx_motion_mapping_preset', true );
         }
         if ( ! $resolved_model ) {
-            $resolved_model = get_option( 'symplx_replicate_model_version', '' );
+            $resolved_model = get_option( 'symplx_motion_replicate_model_version', '' );
         }
         update_post_meta( $attachment_id, '_symplx_motion_model_version_resolved', $resolved_model );
         if ( $resolved_preset ) {
             update_post_meta( $attachment_id, '_symplx_motion_preset_resolved', $resolved_preset );
         }
 
-        Symplx_Starter_Jobs::schedule_check( $attachment_id, 30 );
+        Symplx_Motion_Jobs::schedule_check( $attachment_id, 30 );
 
         wp_redirect( add_query_arg( 'symplx_motion_notice', 'started', admin_url( 'upload.php' ) ) );
         exit;
@@ -122,10 +122,10 @@ class Symplx_Starter_Media_UI {
         $text = '';
         $class = 'notice-info';
         switch ( $msg ) {
-            case 'started': $text = __( 'Motion generation started. Status will update automatically.', 'symplx-starter' ); break;
-            case 'noprovider': $text = __( 'No motion provider configured. Set one under Settings → Symplx Motion.', 'symplx-starter' ); break;
-            case 'notimage': $text = __( 'Selected item is not an image.', 'symplx-starter' ); break;
-            case 'error': $text = __( 'Failed to start generation. Check provider settings.', 'symplx-starter' ); $class = 'notice-error'; break;
+            case 'started': $text = __( 'Motion generation started. Status will update automatically.', 'symplx-motion' ); break;
+            case 'noprovider': $text = __( 'No motion provider configured. Set one under Settings → Symplx Motion.', 'symplx-motion' ); break;
+            case 'notimage': $text = __( 'Selected item is not an image.', 'symplx-motion' ); break;
+            case 'error': $text = __( 'Failed to start generation. Check provider settings.', 'symplx-motion' ); $class = 'notice-error'; break;
         }
         if ( $text ) {
             echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible"><p>' . esc_html( $text ) . '</p></div>';

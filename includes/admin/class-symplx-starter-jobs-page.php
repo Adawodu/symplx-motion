@@ -6,7 +6,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Symplx_Starter_Jobs_Table extends WP_List_Table {
+class Symplx_Motion_Jobs_Table extends WP_List_Table {
     private $filter_provider;
     private $filter_status;
 
@@ -19,17 +19,17 @@ class Symplx_Starter_Jobs_Table extends WP_List_Table {
     public function get_columns() {
         return [
             'cb'        => '<input type="checkbox" />',
-            'thumb'     => __( 'Image', 'symplx-starter' ),
-            'title'     => __( 'Attachment', 'symplx-starter' ),
-            'provider'  => __( 'Provider', 'symplx-starter' ),
-            'model'     => __( 'Model', 'symplx-starter' ),
-            'preset'    => __( 'Preset', 'symplx-starter' ),
-            'status'    => __( 'Status', 'symplx-starter' ),
-            'progress'  => __( 'Progress', 'symplx-starter' ),
-            'created'   => __( 'Created', 'symplx-starter' ),
-            'updated'   => __( 'Updated', 'symplx-starter' ),
-            'video'     => __( 'Video', 'symplx-starter' ),
-            'actions'   => __( 'Actions', 'symplx-starter' ),
+            'thumb'     => __( 'Image', 'symplx-motion' ),
+            'title'     => __( 'Attachment', 'symplx-motion' ),
+            'provider'  => __( 'Provider', 'symplx-motion' ),
+            'model'     => __( 'Model', 'symplx-motion' ),
+            'preset'    => __( 'Preset', 'symplx-motion' ),
+            'status'    => __( 'Status', 'symplx-motion' ),
+            'progress'  => __( 'Progress', 'symplx-motion' ),
+            'created'   => __( 'Created', 'symplx-motion' ),
+            'updated'   => __( 'Updated', 'symplx-motion' ),
+            'video'     => __( 'Video', 'symplx-motion' ),
+            'actions'   => __( 'Actions', 'symplx-motion' ),
         ];
     }
 
@@ -88,7 +88,7 @@ class Symplx_Starter_Jobs_Table extends WP_List_Table {
     }
 
     protected function get_bulk_actions() {
-        return [ 'bulk_refresh' => __( 'Refresh', 'symplx-starter' ) ];
+        return [ 'bulk_refresh' => __( 'Refresh', 'symplx-motion' ) ];
     }
 
     public function process_bulk_action() {
@@ -96,12 +96,12 @@ class Symplx_Starter_Jobs_Table extends WP_List_Table {
             $ids = isset( $_REQUEST['attachment'] ) ? (array) $_REQUEST['attachment'] : [];
             $ids = array_map( 'absint', $ids );
             check_admin_referer( 'bulk-' . $this->_args['plural'] );
-            require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
-            $jobs = new Symplx_Starter_Jobs();
+            require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+            $jobs = new Symplx_Motion_Jobs();
             foreach ( $ids as $id ) {
                 if ( $id ) {
                     $jobs->check_job( $id );
-                    Symplx_Starter_Jobs::schedule_check( $id, 30 );
+                    Symplx_Motion_Jobs::schedule_check( $id, 30 );
                 }
             }
         }
@@ -113,14 +113,14 @@ class Symplx_Starter_Jobs_Table extends WP_List_Table {
         $status   = $this->filter_status;
         echo '<div class="alignleft actions">';
         echo '<select name="symplx_provider">';
-        echo '<option value="">' . esc_html__( 'All providers', 'symplx-starter' ) . '</option>';
+        echo '<option value="">' . esc_html__( 'All providers', 'symplx-motion' ) . '</option>';
         foreach ( [ 'mock' => 'Mock', 'replicate' => 'Replicate' ] as $k => $label ) {
             echo '<option value="' . esc_attr( $k ) . '"' . selected( $provider, $k, false ) . '>' . esc_html( $label ) . '</option>';
         }
         echo '</select>';
 
         echo '<select name="symplx_status" style="margin-left:6px;">';
-        echo '<option value="">' . esc_html__( 'All statuses', 'symplx-starter' ) . '</option>';
+        echo '<option value="">' . esc_html__( 'All statuses', 'symplx-motion' ) . '</option>';
         foreach ( [ 'queued' => 'Queued', 'starting' => 'Starting', 'processing' => 'Processing', 'ready' => 'Ready', 'failed' => 'Failed', 'canceled' => 'Canceled' ] as $k => $label ) {
             echo '<option value="' . esc_attr( $k ) . '"' . selected( $status, $k, false ) . '>' . esc_html( $label ) . '</option>';
         }
@@ -150,23 +150,23 @@ class Symplx_Starter_Jobs_Table extends WP_List_Table {
                 if ( 'failed' === $status ) {
                     $err = get_post_meta( $item['ID'], '_symplx_motion_error', true );
                     $icon = '<span class="dashicons dashicons-warning" style="color:#d63638" title="' . esc_attr( $err ) . '"></span> ';
-                    return $icon . esc_html__( 'Failed', 'symplx-starter' );
+                    return $icon . esc_html__( 'Failed', 'symplx-motion' );
                 }
                 return esc_html( ucfirst( $status ) );
             case 'progress': return $item['progress'] !== '' ? intval( $item['progress'] ) . '%' : '—';
             case 'created': return $item['created'] ? esc_html( get_date_from_gmt( $item['created'], 'Y-m-d H:i' ) ) : '—';
             case 'updated': return $item['updated'] ? esc_html( get_date_from_gmt( $item['updated'], 'Y-m-d H:i' ) ) : '—';
-            case 'video': return $item['video'] ? '<a href="' . esc_url( $item['video'] ) . '" target="_blank">' . esc_html__( 'View', 'symplx-starter' ) . '</a>' : '—';
+            case 'video': return $item['video'] ? '<a href="' . esc_url( $item['video'] ) . '" target="_blank">' . esc_html__( 'View', 'symplx-motion' ) . '</a>' : '—';
             case 'actions':
                 $refresh = wp_nonce_url( add_query_arg( [ 'page' => 'symplx-motion-jobs', 'symplx_action' => 'refresh', 'attachment_id' => $item['ID'] ], admin_url( 'options-general.php' ) ), 'symplx_refresh_' . $item['ID'] );
                 $detail  = wp_nonce_url( add_query_arg( [ 'page' => 'symplx-motion-jobs', 'symplx_action' => 'detail', 'attachment_id' => $item['ID'] ], admin_url( 'options-general.php' ) ), 'symplx_detail_' . $item['ID'] );
-                $actions = '<a class="button" href="' . esc_url( $refresh ) . '">' . esc_html__( 'Refresh', 'symplx-starter' ) . '</a> ';
-                $actions .= '<a class="button" href="' . esc_url( $detail ) . '">' . esc_html__( 'Detail', 'symplx-starter' ) . '</a> ';
+                $actions = '<a class="button" href="' . esc_url( $refresh ) . '">' . esc_html__( 'Refresh', 'symplx-motion' ) . '</a> ';
+                $actions .= '<a class="button" href="' . esc_url( $detail ) . '">' . esc_html__( 'Detail', 'symplx-motion' ) . '</a> ';
                 $has_job = get_post_meta( $item['ID'], '_symplx_motion_job_id', true );
                 $has_video = get_post_meta( $item['ID'], '_symplx_motion_video_url', true );
                 if ( ! $has_job && ! $has_video ) {
                     $gen = wp_nonce_url( add_query_arg( [ 'page' => 'symplx-motion-jobs', 'symplx_action' => 'generate', 'attachment_id' => $item['ID'] ], admin_url( 'options-general.php' ) ), 'symplx_generate_' . $item['ID'] );
-                    $actions .= '<a class="button button-primary" href="' . esc_url( $gen ) . '">' . esc_html__( 'Generate', 'symplx-starter' ) . '</a>';
+                    $actions .= '<a class="button button-primary" href="' . esc_url( $gen ) . '">' . esc_html__( 'Generate', 'symplx-motion' ) . '</a>';
                 }
                 return $actions;
         }
@@ -174,7 +174,7 @@ class Symplx_Starter_Jobs_Table extends WP_List_Table {
     }
 }
 
-class Symplx_Starter_Jobs_Page {
+class Symplx_Motion_Jobs_Page {
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'menu' ] );
     }
@@ -182,8 +182,8 @@ class Symplx_Starter_Jobs_Page {
     public function menu() {
         add_submenu_page(
             'options-general.php',
-            __( 'Symplx Motion Jobs', 'symplx-starter' ),
-            __( 'Symplx Motion Jobs', 'symplx-starter' ),
+            __( 'Symplx Motion Jobs', 'symplx-motion' ),
+            __( 'Symplx Motion Jobs', 'symplx-motion' ),
             'manage_options',
             'symplx-motion-jobs',
             [ $this, 'render' ]
@@ -194,12 +194,12 @@ class Symplx_Starter_Jobs_Page {
         if ( isset( $_GET['symplx_action'] ) && $_GET['symplx_action'] === 'refresh' ) {
             $att_id = isset( $_GET['attachment_id'] ) ? absint( $_GET['attachment_id'] ) : 0;
             if ( $att_id && wp_verify_nonce( (string) $_GET['_wpnonce'], 'symplx_refresh_' . $att_id ) ) {
-                require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
                 // Immediate check, then reschedule.
-                $jobs = new Symplx_Starter_Jobs();
+                $jobs = new Symplx_Motion_Jobs();
                 $jobs->check_job( $att_id );
-                Symplx_Starter_Jobs::schedule_check( $att_id, 30 );
-                echo '<div class="notice notice-info is-dismissible"><p>' . esc_html__( 'Job refreshed.', 'symplx-starter' ) . '</p></div>';
+                Symplx_Motion_Jobs::schedule_check( $att_id, 30 );
+                echo '<div class="notice notice-info is-dismissible"><p>' . esc_html__( 'Job refreshed.', 'symplx-motion' ) . '</p></div>';
             }
         }
         if ( isset( $_GET['symplx_action'] ) && $_GET['symplx_action'] === 'generate' ) {
@@ -213,8 +213,8 @@ class Symplx_Starter_Jobs_Page {
                 }
             }
             if ( $ok ) {
-                require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-                require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
+                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
+                require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/jobs/class-symplx-starter-jobs.php';
                 $provider = Symplx_Motion_Providers_Registry::get();
                 if ( $provider ) {
                     $res = $provider->create_job( $att_id, [] );
@@ -238,35 +238,35 @@ class Symplx_Starter_Jobs_Page {
                             $resolved_preset = get_post_meta( $parent, 'symplx_motion_mapping_preset', true );
                         }
                         if ( ! $resolved_model ) {
-                            $resolved_model = get_option( 'symplx_replicate_model_version', '' );
+                            $resolved_model = get_option( 'symplx_motion_replicate_model_version', '' );
                         }
                         update_post_meta( $att_id, '_symplx_motion_model_version_resolved', $resolved_model );
                         if ( $resolved_preset ) {
                             update_post_meta( $att_id, '_symplx_motion_preset_resolved', $resolved_preset );
                         }
-                        Symplx_Starter_Jobs::schedule_check( $att_id, 30 );
-                        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Generation started.', 'symplx-starter' ) . '</p></div>';
+                        Symplx_Motion_Jobs::schedule_check( $att_id, 30 );
+                        echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Generation started.', 'symplx-motion' ) . '</p></div>';
                     } else {
-                        echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Failed to start generation. Check provider settings.', 'symplx-starter' ) . '</p></div>';
+                        echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Failed to start generation. Check provider settings.', 'symplx-motion' ) . '</p></div>';
                     }
                 }
             }
         }
 
         echo '<div class="wrap">';
-        echo '<h1>' . esc_html__( 'Symplx Motion Jobs', 'symplx-starter' ) . '</h1>';
-        echo '<p>' . esc_html__( 'List of image attachments with motion jobs or generated artifacts. Background polling updates status. Use filters, bulk refresh, or per-row actions.', 'symplx-starter' ) . '</p>';
+        echo '<h1>' . esc_html__( 'Symplx Motion Jobs', 'symplx-motion' ) . '</h1>';
+        echo '<p>' . esc_html__( 'List of image attachments with motion jobs or generated artifacts. Background polling updates status. Use filters, bulk refresh, or per-row actions.', 'symplx-motion' ) . '</p>';
 
         // Quick generate form
         echo '<form method="get" style="margin-bottom:12px;">';
         echo '<input type="hidden" name="page" value="symplx-motion-jobs" />';
         echo '<input type="hidden" name="symplx_action" value="generate" />';
-        echo '<label>' . esc_html__( 'Attachment ID', 'symplx-starter' ) . ' <input type="number" name="attachment_id" min="1" required /></label> ';
+        echo '<label>' . esc_html__( 'Attachment ID', 'symplx-motion' ) . ' <input type="number" name="attachment_id" min="1" required /></label> ';
         wp_nonce_field( 'symplx_generate_any', '_symplx_nonce_any' );
         submit_button( __( 'Generate Motion' ), 'primary', '', false );
         echo '</form>';
 
-        $table = new Symplx_Starter_Jobs_Table();
+        $table = new Symplx_Motion_Jobs_Table();
         $table->process_bulk_action();
         $table->prepare_items();
         echo '<form method="get">';
@@ -282,19 +282,19 @@ class Symplx_Starter_Jobs_Page {
                 $raw = get_post_meta( $att_id, '_symplx_motion_last_raw', true );
                 $logs = get_post_meta( $att_id, '_symplx_motion_logs', true );
                 echo '<div class="wrap">';
-                echo '<h2>' . esc_html__( 'Job Detail', 'symplx-starter' ) . ' #' . intval( $att_id ) . '</h2>';
+                echo '<h2>' . esc_html__( 'Job Detail', 'symplx-motion' ) . ' #' . intval( $att_id ) . '</h2>';
                 if ( $logs ) {
-                    echo '<h3>' . esc_html__( 'Logs', 'symplx-starter' ) . '</h3>';
+                    echo '<h3>' . esc_html__( 'Logs', 'symplx-motion' ) . '</h3>';
                     echo '<pre style="max-height:300px;overflow:auto;background:#f6f7f7;border:1px solid #ccd0d4;padding:10px;">' . esc_html( $logs ) . '</pre>';
                 }
                 if ( $raw ) {
                     $pretty = $raw;
                     $decoded = json_decode( $raw, true );
                     if ( is_array( $decoded ) ) { $pretty = wp_json_encode( $decoded, JSON_PRETTY_PRINT ); }
-                    echo '<h3>' . esc_html__( 'Raw Payload', 'symplx-starter' ) . '</h3>';
+                    echo '<h3>' . esc_html__( 'Raw Payload', 'symplx-motion' ) . '</h3>';
                     echo '<pre style="max-height:400px;overflow:auto;background:#f6f7f7;border:1px solid #ccd0d4;padding:10px;">' . esc_html( $pretty ) . '</pre>';
                 } else {
-                    echo '<p>' . esc_html__( 'No raw payload recorded yet. Refresh the job to fetch provider status.', 'symplx-starter' ) . '</p>';
+                    echo '<p>' . esc_html__( 'No raw payload recorded yet. Refresh the job to fetch provider status.', 'symplx-motion' ) . '</p>';
                 }
                 echo '</div>';
             }

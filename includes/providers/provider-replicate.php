@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class Symplx_Motion_Provider_Replicate implements Symplx_Motion_Provider_Interface {
 
     private function get_api_token() {
-        $tok = get_option( 'symplx_replicate_api_token', '' );
+        $tok = get_option( 'symplx_motion_replicate_api_token', '' );
         return $tok ? trim( (string) $tok ) : '';
     }
 
     private function get_model_version() {
         // Make the model version configurable; user can paste the version hash.
         // Example (not guaranteed current): stability-ai/stable-video-diffusion-img2vid:VERSION_HASH
-        $v = get_option( 'symplx_replicate_model_version', '' );
+        $v = get_option( 'symplx_motion_replicate_model_version', '' );
         return $v ? trim( (string) $v ) : '';
     }
 
@@ -47,12 +47,12 @@ class Symplx_Motion_Provider_Replicate implements Symplx_Motion_Provider_Interfa
         }
 
         // Build input map based on settings and optional preset.
-        $image_key   = get_option( 'symplx_replicate_image_key', 'input_image' ) ?: 'input_image';
-        $fps_key     = get_option( 'symplx_replicate_fps_key', 'fps' );
-        $frames_key  = get_option( 'symplx_replicate_frames_key', 'num_frames' );
-        $prompt_key  = get_option( 'symplx_replicate_prompt_key', 'prompt' );
-        $duration_key= get_option( 'symplx_replicate_duration_key', '' );
-        $extra_json  = get_option( 'symplx_replicate_extra_input', '' );
+        $image_key   = get_option( 'symplx_motion_replicate_image_key', 'input_image' ) ?: 'input_image';
+        $fps_key     = get_option( 'symplx_motion_replicate_fps_key', 'fps' );
+        $frames_key  = get_option( 'symplx_motion_replicate_frames_key', 'num_frames' );
+        $prompt_key  = get_option( 'symplx_motion_replicate_prompt_key', 'prompt' );
+        $duration_key= get_option( 'symplx_motion_replicate_duration_key', '' );
+        $extra_json  = get_option( 'symplx_motion_replicate_extra_input', '' );
 
         $preset = '';
         if ( $parent_post_id ) {

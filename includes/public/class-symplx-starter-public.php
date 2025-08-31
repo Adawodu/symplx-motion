@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Symplx_Starter_Public {
+class Symplx_Motion_Public {
 
     public function __construct() {
         // Shortcode for explicitly motion-izing a specific image attachment.
@@ -14,14 +14,14 @@ class Symplx_Starter_Public {
     }
 
     private function render_motion_wrapper( $img_html, $effect = null ) {
-        $effect = $effect ?: get_option( 'symplx_starter_default_effect', 'kenburns' );
+        $effect = $effect ?: get_option( 'symplx_motion_default_effect', 'kenburns' );
         return '<div class="symplx-motion symplx-effect-' . esc_attr( $effect ) . '">' . $img_html . '</div>';
     }
 
     public function shortcode_motion( $atts ) {
         $atts = shortcode_atts( [
             'id'     => 0,
-            'effect' => get_option( 'symplx_starter_default_effect', 'kenburns' ),
+            'effect' => get_option( 'symplx_motion_default_effect', 'kenburns' ),
             'prompt' => '',
         ], $atts, 'symplx_motion' );
 
@@ -57,7 +57,7 @@ class Symplx_Starter_Public {
         }
 
         $enable_all = (bool) get_post_meta( $post->ID, 'symplx_motion_enable_all', true );
-        $default_mode = get_option( 'symplx_starter_default_mode', 'off' );
+        $default_mode = get_option( 'symplx_motion_default_mode', 'off' );
         $should_apply = $enable_all || ( 'all' === $default_mode );
         if ( ! $should_apply ) {
             return $content;
@@ -101,7 +101,7 @@ class Symplx_Starter_Public {
             }
 
             $wrapper = $dom->createElement( 'div' );
-            $wrapper->setAttribute( 'class', 'symplx-motion symplx-effect-' . esc_attr( get_option( 'symplx_starter_default_effect', 'kenburns' ) ) );
+            $wrapper->setAttribute( 'class', 'symplx-motion symplx-effect-' . esc_attr( get_option( 'symplx_motion_default_effect', 'kenburns' ) ) );
             $img->parentNode->replaceChild( $wrapper, $img );
             $wrapper->appendChild( $img );
         }

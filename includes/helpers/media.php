@@ -21,7 +21,7 @@ function symplx_sideload_video_to_media( int $attachment_id, string $remote_url 
     if ( is_wp_error( $tmp ) ) return $tmp;
 
     // Enforce max size (MB) if configured
-    $max_mb = (int) get_option( 'symplx_max_video_size_mb', 100 );
+    $max_mb = (int) get_option( 'symplx_motion_max_video_size_mb', 100 );
     if ( $max_mb > 0 ) {
         $size = @filesize( $tmp );
         if ( false !== $size && $size > ( $max_mb * 1024 * 1024 ) ) {

@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-class Symplx_Starter_Jobs {
+class Symplx_Motion_Jobs {
 
     public function __construct() {
         add_action( 'symplx_motion_check_job', [ $this, 'check_job' ], 10, 1 );
@@ -30,8 +30,8 @@ class Symplx_Starter_Jobs {
             return; // done
         }
 
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/providers/interface-provider.php';
-        require_once SYMPLX_STARTER_PLUGIN_DIR . 'includes/helpers/media.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/providers/interface-provider.php';
+        require_once SYMPLX_MOTION_PLUGIN_DIR . 'includes/helpers/media.php';
 
         $job_id = get_post_meta( $attachment_id, '_symplx_motion_job_id', true );
         if ( ! $job_id ) {

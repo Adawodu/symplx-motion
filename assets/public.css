@@ -1,0 +1,39 @@
+/* Symplx Starter Public Styles */
+.symplx-starter-message {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #eef6ff;
+  border: 1px solid #b3d4ff;
+  border-radius: 4px;
+}
+
+/* Motion wrappers */
+.symplx-motion {
+  overflow: hidden;
+  display: inline-block;
+  position: relative;
+}
+
+.symplx-motion img.symplx-motion-img,
+.symplx-motion img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: center center;
+}
+
+/* Ken Burns: slow zoom + pan */
+.symplx-effect-kenburns img {
+  animation: symplx-kenburns 10s ease-in-out both;
+}
+
+@keyframes symplx-kenburns {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.08) translate(-2%, -2%); }
+  100% { transform: scale(1.12) translate(2%, 2%); }
+}
+
+/* Parallax-ish hover effect */
+.symplx-effect-parallax { perspective: 800px; }
+.symplx-effect-parallax img { transition: transform .3s ease; }
+.symplx-effect-parallax:hover img { transform: translateZ(20px) scale(1.05); }

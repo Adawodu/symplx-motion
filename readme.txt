@@ -3,7 +3,7 @@ Contributors: symplx
 Requires at least: 5.8
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,15 @@ Features:
   - GET `/wp-json/symplx/v1/motion/status?attachment_id=123` to query status/URL.
 
 == Changelog ==
+
+= 0.6.0 =
+* Rename project to Symplx Motion across codebase (classes, constants, filenames, settings group, text domain).
+* Add activation migration to carry old `symplx_starter_*` and `symplx_replicate_*` options to new `symplx_motion_*` keys.
+* Update admin UI labels/slugs and jobs dashboard to new text domain and option keys.
+* Keep backward cleanup on uninstall for both old and new option keys.
+
+= 0.5.0 =
+* Initial public rename preparations and main file switch to `symplx-motion.php`.
 
 = 0.1.0 =
 * Motion-focused scaffold: settings, per-post toggle, shortcode, REST endpoints.

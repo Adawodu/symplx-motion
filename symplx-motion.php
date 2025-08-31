@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Symplx Motion
  * Description: Turn static images in posts into motion-enhanced media using AI. Enable per-image or entire post.
- * Version: 0.5.0
+ * Version: 0.6.0
  * Author: Symplx Studio
  * Text Domain: symplx-motion
  * Domain Path: /languages
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-define( 'SYMPLX_MOTION_VERSION', '0.5.0' );
+define( 'SYMPLX_MOTION_VERSION', '0.6.0' );
 define( 'SYMPLX_MOTION_PLUGIN_FILE', __FILE__ );
 define( 'SYMPLX_MOTION_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SYMPLX_MOTION_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

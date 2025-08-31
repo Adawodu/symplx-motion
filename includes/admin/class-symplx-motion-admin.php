@@ -167,7 +167,7 @@ class Symplx_Motion_Admin {
     public function field_replicate_version() {
         $value = get_option( 'symplx_motion_replicate_model_version', '' );
         echo '<input type="text" class="regular-text" name="symplx_motion_replicate_model_version" value="' . esc_attr( $value ) . '" />';
-        echo '<p class="description">' . esc_html__( 'Replicate model version (e.g., stability-ai/stable-video-diffusion-img2vid:<hash>).', 'symplx-motion' ) . '</p>';
+        echo '<p class="description">' . esc_html__( 'Accepts owner/model:version, owner/model (latest), or raw version id.', 'symplx-motion' ) . '</p>';
     }
 
     public function field_replicate_input_mapping() {
@@ -436,7 +436,7 @@ class Symplx_Motion_Admin {
 
             if ( $version ) {
                 // If version looks like owner/model:version, verify existence.
-                if ( preg_match( '/^([\w-]+)\/([\w-]+):([\w-]+)/', $version, $m ) ) {
+                if ( preg_match( '/^([\w-]+)\/([\w\.-]+):([\w-]+)/', $version, $m ) ) {
                     $owner = $m[1]; $model = $m[2]; $ver = $m[3];
                     $url = sprintf( 'https://api.replicate.com/v1/models/%s/%s/versions/%s', rawurlencode( $owner ), rawurlencode( $model ), rawurlencode( $ver ) );
                     $res2 = wp_remote_get( $url, [ 'headers' => [ 'Authorization' => 'Token ' . $token ], 'timeout' => 20 ] );
@@ -455,9 +455,36 @@ class Symplx_Motion_Admin {
                             if ( $code2 >= 400 ) $type = 'error';
                         }
                     }
+                } elseif ( preg_match( '/^([\w-]+)\/([\w\.-]+)$/', $version, $m ) ) {
+                    // owner/model without :version → resolve latest version id
+                    $owner = $m[1]; $model = $m[2];
+                    $url = sprintf( 'https://api.replicate.com/v1/models/%s/%s/versions', rawurlencode( $owner ), rawurlencode( $model ) );
+                    $res3 = wp_remote_get( $url, [ 'headers' => [ 'Authorization' => 'Token ' . $token ], 'timeout' => 20 ] );
+                    if ( is_wp_error( $res3 ) ) {
+                        $messages[] = sprintf( __( 'Could not resolve latest version for %1$s/%2$s: %3$s', 'symplx-motion' ), $owner, $model, $res3->get_error_message() );
+                        $type = 'error';
+                    } else {
+                        $code3 = wp_remote_retrieve_response_code( $res3 );
+                        if ( $code3 === 200 ) {
+                            $data = json_decode( wp_remote_retrieve_body( $res3 ), true );
+                            if ( is_array( $data ) && ! empty( $data['results'][0]['id'] ) ) {
+                                $latest = $data['results'][0]['id'];
+                                $messages[] = sprintf( __( 'Resolved latest version for %1$s/%2$s: %3$s', 'symplx-motion' ), $owner, $model, $latest );
+                            } else {
+                                $messages[] = __( 'Could not parse versions response.', 'symplx-motion' );
+                                $type = 'error';
+                            }
+                        } elseif ( $code3 === 404 ) {
+                            $messages[] = __( 'Model not found (404). Check owner/model.', 'symplx-motion' );
+                            $type = 'error';
+                        } else {
+                            $messages[] = sprintf( __( 'Versions list returned HTTP %d.', 'symplx-motion' ), $code3 );
+                            if ( $code3 >= 400 ) $type = 'error';
+                        }
+                    }
                 } else {
-                    // Likely a bare version id; acceptable for create calls, cannot validate without owner/model
-                    $messages[] = __( 'Model version format not owner/model:version. Will attempt to use as a raw version id.', 'symplx-motion' );
+                    // Likely a bare version id; acceptable for create calls
+                    $messages[] = __( 'Using raw version id.', 'symplx-motion' );
                 }
             } else {
                 $messages[] = __( 'Replicate model version is empty.', 'symplx-motion' );

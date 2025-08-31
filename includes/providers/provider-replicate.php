@@ -42,8 +42,26 @@ class Symplx_Motion_Provider_Replicate implements Symplx_Motion_Provider_Interfa
         // Replicate predictions prefer the raw version id (UUID/hash). If the user provided
         // an owner/model:version string, extract just the version segment for the API call.
         $version_for_api = $version;
-        if ( preg_match( '/^[\w-]+\/[\w-]+:([\w-]+)/', $version, $mver ) ) {
+        // Accept formats:
+        // - owner/model:versionhash → extract versionhash
+        // - owner/model              → resolve latest version via API
+        // - raw version id           → use as-is
+        if ( preg_match( '/^[\w-]+\/[\w\.-]+:([\w-]+)/', $version, $mver ) ) {
             $version_for_api = $mver[1];
+        } elseif ( preg_match( '/^[\w-]+\/[\w\.-]+$/', $version ) ) {
+            // Resolve the latest version id for owner/model.
+            $token = $this->get_api_token();
+            $parts = explode( '/', $version, 2 );
+            $owner = $parts[0];
+            $model = $parts[1];
+            $url = sprintf( 'https://api.replicate.com/v1/models/%s/%s/versions', rawurlencode( $owner ), rawurlencode( $model ) );
+            $resv = wp_remote_get( $url, [ 'headers' => [ 'Authorization' => 'Token ' . $token ], 'timeout' => 20 ] );
+            if ( ! is_wp_error( $resv ) && 200 === wp_remote_retrieve_response_code( $resv ) ) {
+                $data = json_decode( wp_remote_retrieve_body( $resv ), true );
+                if ( is_array( $data ) && ! empty( $data['results'][0]['id'] ) ) {
+                    $version_for_api = $data['results'][0]['id'];
+                }
+            }
         }
 
         // Build input map based on settings and optional preset.
